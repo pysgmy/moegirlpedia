@@ -11,7 +11,7 @@ Original script: https://zh.moegirl.org.cn/User:C8H17OH/quick-save.js
 // <pre>
 $(function() {
     if (!mw.config.get("wgPageName").startsWith("User_talk:一位史蒂夫")) { return; }
-    if (mw.config.get("wgUserGroups").indexOf("autoconfirmed") === -1) { return; }
+    if (!mw.config.get("wgUserGroups").includes("goodeditor")) { return; }
     mw.loader.load(`${mw.config.get("wgServer")}${mw.config.get("wgScriptPath")}/User:AnnAngela/js/quick-save.js/style.css?action=raw&ctype=text/css`, "text/css");
     mw.loader.using("mw.Api").then(function() {
         var container = $('<div class="AnnTools_Frame" style="display: none;"><div class="AnnTools_Frame_Head"><div class="AnnTools_Frame_Title">用户讨论页段落存档工具</div><span class="AnnTools_Frame_Close">×</span></div><div class="AnnTools_Frame_Content"><div class="AnnTools_Confirm"><div class="AnnTools_Confirm_Content">请问你是要存档这个段落吗？<br>段落标题：<span class="AnnTools_SectionTitle"></span></div><div class="AnnTools_Confirm_Yes">是呀是呀</div><div class="AnnTools_Confirm_No">并不是呢</div></div><div class="AnnTools_Info"><div class="AnnTools_ProgressBar"><div class="AnnTools_ProgressBar_Finished"></div></div>进度：<ol class="AnnTools_WorkDetail"></ol></div></div></div>').appendTo("body"),
