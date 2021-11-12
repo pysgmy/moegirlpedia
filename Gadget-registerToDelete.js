@@ -5,10 +5,10 @@ $(function() {
     $('<a/>', {
         attr: {
             href: "#",
-            title: "挂删本页[alt-shift-d]",
-            accesskey: 'd'
+            title: "挂删本页[alt-shift-o]",
+            accesskey: 'o'
         },
-        text: '挂删'
+        text: '旧版挂删'
     }).on('click', function() {
         var reason = prompt('挂删的理由【将会替换全文内容】\n【空白则使用默认理由（不在收录范围内）】\n【取消则不进行挂删】：'),
             self = $(this);
