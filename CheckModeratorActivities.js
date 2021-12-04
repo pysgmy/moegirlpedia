@@ -3,25 +3,15 @@
 $(() => (async () => {
     const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
     try {
-        if (!mw.config.get("wgUserGroups").includes("patroller")) { return; }
+        if (!mw.config.get("wgUserGroups").includes("sysop")) { return; }
         if (mw.config.get("wgPageName") !== "Special:维护组最后活跃列表") { return; }
         $("#firstHeading").text("维护组最后活跃列表【（主、模板、分类、帮助、萌娘百科）名字空间下的指定时间范围编辑数统计】");
         document.title = "维护组最后活跃列表";
         const container = $("#mw-content-text");
         container.html('加载中（<span id="step">0</span> / 5）……');
         const step = $("#step");
-        mw.loader.addStyleTag(".markrights-bureaucrat{color:black}.markrights-checkuser{color:purple}.markrights-suppress{color:purple}.markrights-sysop{color:mediumvioletred}.markrights-patroller{color:sienna}.markrights-bot{color:blue}.markrights-goodeditor{color:green}sup[class^=markrights]+sup[class^=markrights]{margin-left:2px}");
-        await mw.loader.using(["mediawiki.api"]);
+        await mw.loader.using(["mediawiki.api", "ext.gadget.usergroup"]);
         mw.loader.using("jquery.tablesorter");
-        const groupsStr = {
-            bureaucrat: "行",
-            checkuser: "查",
-            suppress: "监",
-            sysop: "管",
-            patroller: "巡",
-            bot: "机",
-            goodeditor: "优",
-        };
         const api = new mw.Api();
         const users = await (async () => {
             const result = {
@@ -130,9 +120,9 @@ $(() => (async () => {
         });
         const getContribs = async (userGroup, stepCount, month) => {
             const before = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30 * month);
-            const _result=[];
-            for (const user of users[userGroup]){
-                const apiResult=[];
+            const _result = [];
+            for (const user of users[userGroup]) {
+                const apiResult = [];
                 for (const url of apiUrls) {
                     await sleep(100);
                     apiResult.push(await (url.includes("zh.moegirl") ? api.post(generateRequestData(before, user)) : $.ajax({
@@ -142,7 +132,7 @@ $(() => (async () => {
                         type: "GET",
                     })));
                 }
-                _result.push([user,apiResult]);
+                _result.push([user, apiResult]);
             }
             const result = _result.map(([user, apiResult]) => ({ user, count: apiResult.map(({ query: { usercontribs: { length } } }) => length).reduce((accumulator, currentValue) => accumulator + currentValue), maybeOverCap: apiResult.filter((result) => "continue" in result).length > 0 }));
             step.text(stepCount);
@@ -169,7 +159,7 @@ $(() => (async () => {
             table.html(`<caption>${groupName}列表</caption><thead><th>用户名</th><th>近${month}个月来的编辑数</th></thead><tbody></tbody>`);
             const tbody = table.find("tbody");
             usercontribs[group].sort(({ count: a }, { count: b }) => a - b).forEach(({ user, count, maybeOverCap }) => {
-                tbody.append(`<tr><td><a href="/User:${encodeURI(user)}" class="mw-userlink " title="User:${user}"><bdi>${user}</bdi></a>${users.group[user].filter((group) => group in groupsStr).map((group) => `<sup class="markrights-${group}">${groupsStr[group]}</sup>`).join("")}<span class="mw-usertoollinks">（<a href="/User_talk:${encodeURI(user)}" class="mw-usertoollinks-talk" title="User talk:${user}">讨论</a> | <a href="/Special:%E7%94%A8%E6%88%B7%E8%B4%A1%E7%8C%AE/${encodeURI(user)}" class="mw-usertoollinks-contribs" title="Special:用户贡献/${user}">贡献</a> | <a href="/Special:%E5%B0%81%E7%A6%81/${user}" class="mw-usertoollinks-block" title="Special:封禁/${user}">封禁</a>）</span></td>${count === 0 ? "<td style=\"font-style: italic; color: red;\" data-sort-value=\"0\">无相关编辑</td>" : `<td style="color: ${count < minimumCount ? "red" : "black"};" data-sort-value="${count}">${count}${maybeOverCap ? "+次（实际编辑次数可能超出单次api请求上限）" : "次"}</td>`}`);
+                tbody.append(`<tr><td><a href="/User:${encodeURI(user)}" class="mw-userlink" title="User:${user}"><bdi>${user}</bdi></a><span class="mw-usertoollinks">（<a href="/User_talk:${encodeURI(user)}" class="mw-usertoollinks-talk" title="User talk:${user}">讨论</a> | <a href="/Special:%E7%94%A8%E6%88%B7%E8%B4%A1%E7%8C%AE/${encodeURI(user)}" class="mw-usertoollinks-contribs" title="Special:用户贡献/${user}">贡献</a> | <a href="/Special:%E5%B0%81%E7%A6%81/${user}" class="mw-usertoollinks-block" title="Special:封禁/${user}">封禁</a>）</span></td>${count === 0 ? "<td style=\"font-style: italic; color: red;\" data-sort-value=\"0\">无相关编辑</td>" : `<td style="color: ${count < minimumCount ? "red" : "black"};" data-sort-value="${count}">${count}${maybeOverCap ? "+次（实际编辑次数可能超出单次api请求上限）" : "次"}</td>`}`);
             });
             root.append(table);
             root.appendTo(container);
@@ -180,6 +170,7 @@ $(() => (async () => {
         render("patroller", "巡查姬", 1, 3);
         await mw.loader.using("jquery.tablesorter");
         container.find(".sortable").tablesorter();
+        $(window).trigger("load");
     } catch (reason) {
         console.error(reason);
         if (reason instanceof Error) {
