@@ -34,7 +34,7 @@ $(() => (async () => {
             _unknown: '<span style="height:1em;width:1em;background-color:gray;border-radius:50%;display:inline-block;"></span><i style="color:gray;">状态不详</i>',
         };
         const originalBuiltinStatusIndex = Object.keys(builtinStatus);
-        mw.loader.addStyleTag("#pt-userstatus { margin-top: 0.75em !important; margin-bottom: 0px !important; } .pt-userstatus-img { width: 25px; margin-top: -0.25em; }");
+        mw.loader.addStyleTag("#pt-userstatus { margin-top: 1em !important; margin-bottom: 0px !important; } .pt-userstatus-img { width: 25px; margin-top: -0.25em; }");
         builtinStatus.on = builtinStatus.online;
         builtinStatus.off = builtinStatus.offline;
         builtinStatus.break = builtinStatus.wikibreak;
@@ -83,7 +83,7 @@ $(() => (async () => {
             div.find("img").attr("class", "pt-userstatus-img");
             return div.html();
         })();
-        const pt = $("<li id=\"pt-userstatus\"><a id=\"pt-userpage-link\" href=\"javascript:void(0);\" dir=\"auto\" title=\"您的状态\"></a></li>");
+        const pt = $("<li id=\"pt-userstatus\"><a id=\"pt-userpage-link\" href=\"javascript:void(0);\" dir=\"auto\" style=\"display:inline-flex;align-items:center;\" title=\"您的状态\"></a></li>");
         pt.find("#pt-userpage-link").html(currentStatus).on("click", async () => {
             await mw.loader.using(["oojs-ui", "mw.Api"]);
             const messageDialog = new OO.ui.MessageDialog();
@@ -99,7 +99,7 @@ $(() => (async () => {
                 options: builtinStatusList.map(({ data, label }) => ({ data, label })),
             });
             builtinStatusSelector.$element.find(".oo-ui-radioSelectWidget > .oo-ui-radioOptionWidget > .oo-ui-labelElement-label").each((_, labelEle) => {
-                $(labelEle).css("overflow", "visible").html((builtinStatusList.filter(({ label }) => $(labelEle).text() === label)[0] || { html: $(labelEle).html() }).html);
+                $(labelEle).css({"overflow":"visible","display":"inline-flex","align-items":"center"}).html((builtinStatusList.filter(({ label }) => $(labelEle).text() === label)[0] || { html: $(labelEle).html() }).html);
             });
             container.append(builtinStatusSelector.$element);
             container.append(`<p>本工具在获取状态信息后有10分钟的缓存，您可以通过直接打开<a href="${mw.config.get("wgServer")}${mw.config.get("wgScriptPath")}/${statusPage}">自己的状态页</a>来强制获取最新状态信息。`);
