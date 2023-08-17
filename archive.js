@@ -82,7 +82,7 @@ $(function() {
                         title: "User:一位史蒂夫" + "/Backup",
                         text: data.sectionText.replace("==" + data.sectionTitleRaw + "==", "").trim(),
                         section: "new",
-                        tags: "快速存档讨论串|Automation tool",
+                        tags: "Automation tool",
                         sectiontitle: data.sectionTitleRaw,
                         summary: "快速存档讨论串：" + container.data().sectionTitle,
                     }).then(function(result) {
@@ -103,7 +103,7 @@ $(function() {
                         summary: "快速存档讨论串：" + container.data().sectionTitle,
                         text: "==" + data.sectionTitleRaw + "==\n" + "{{Saved|link=" + "User:一位史蒂夫" + "/Backup" + "|title=" + container.data().sectionTitleSafe.replace(/\|/g, "{{!}}") + "}}",
                         section: container.data().section,
-                        tags: "快速存档讨论串|Automation tool",
+                        tags: "Automation tool",
                     }).then(function(result) {
                         if (result.error) { throw new Error("Editing Error: " + result.error["*"]); }
                         container.trigger("success");
