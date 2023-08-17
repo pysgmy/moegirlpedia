@@ -89,7 +89,7 @@ $(function() {
                 movetalk: true,
                 movesubpages: true,
                 noredirect: true,
-                reason: reason,
+                reason: "移动页面：" + reason,
                 watchlist: 'preferences'
             });
         }, loadingBox.endOut.bind(loadingBox)).then(function(d) {
