@@ -48,7 +48,7 @@ $(function() {
         if (!self.data("href")) { loop(null, target); }
         if (!parent.find(self)[0]) { return false; }
         if (mw.config.get("wgRollbacking")) { return false; }
-        var rollbackSummary = prompt("回退操作的编辑摘要【xxx//Rollback】\n【空白则使用默认回退摘要】\n【取消则不进行回退】：");
+        var rollbackSummary = prompt("回退操作的编辑摘要【回退：xxx】\n【空白则使用默认回退摘要】\n【取消则不进行回退】：");
         if (rollbackSummary !== null) {
             var uri = new mw.Uri(self.data("href"));
             self.replaceWith('<span id="rbing"><img src="https://img.moegirl.org.cn/common/d/d1/Windows_10_loading.gif" style="height: 1em; margin-top: -.25em;">正在回退中……</span>');
@@ -61,7 +61,7 @@ $(function() {
             api.post({
                 title: uri.query.title,
                 user: uri.query.from,
-                summary: rollbackSummary ? rollbackSummary + " //Rollback" : "//Rollback",
+                summary: rollbackSummary ? "回退：" + rollbackSummary : "回退编辑",
                 token: uri.query.token,
                 action: "rollback",
                 format: "json",
