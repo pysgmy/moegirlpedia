@@ -4,7 +4,7 @@ $(function () {
             "action": "edit",
             "format": "json",
             "pageid": pageid,
-            "summary": '[[User:Nzh21/js/QuickUndo.js|快速撤销]]从版本' + undoafter + '到版本' + undoid + '的[[Special:Diff/' + undoafter + '/' + undoid + '|所有编辑]]',
+            "summary": '快速撤销：从版本' + undoafter + '到版本' + undoid + '的[[Special:Diff/' + undoafter + '/' + undoid + '|所有编辑]]',
             "undo": undoid,
             "token": mw.user.tokens.values.editToken,
         };
@@ -69,13 +69,13 @@ $(function () {
                 times++;
             }
         });
-        var rollback = document.createElement('a');
-        rollback.innerText = '回退' + times + '次的编辑';
-        rollback.href = '#.';
-        rollback.onclick = function () {
-            undo(mw.config.values.wgArticleId, mw.config.values.wgCurRevisionId, undoafter);
-        }
-        $('#pagehistory li:first').append('[').append(rollback).append(']')
+        //var rollback = document.createElement('a');
+        //rollback.innerText = '回退' + times + '次的编辑';
+        //rollback.href = '#.';
+        //rollback.onclick = function () {
+        //    undo(mw.config.values.wgArticleId, mw.config.values.wgCurRevisionId, undoafter);
+        //}
+        //$('#pagehistory li:first').append('[').append(rollback).append(']')
     }
     window.QuickDiffExtension = window.QuickDiffExtension || [];
     window.QuickDiffExtension.push(function (that, data) {
